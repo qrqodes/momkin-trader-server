@@ -33,6 +33,9 @@ server.on('connection', (ws) => {
     ws.on('close', () => console.log('Player disconnected'));
 });
 
+server.on('listening', () => console.log(`WebSocket server listening on port ${port}`));
+server.on('error', (error) => console.error('Server error:', error));
+
 function broadcast(data) {
     server.clients.forEach(client => {
         if (client.readyState === WebSocket.OPEN) {
