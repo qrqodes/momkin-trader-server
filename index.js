@@ -1,5 +1,6 @@
 const WebSocket = require('ws');
-const server = new WebSocket.Server({ port: 8080 });
+const port = process.env.PORT || 8080; // Use Render's assigned port
+const server = new WebSocket.Server({ port });
 
 let players = {};
 let communityPredictions = { up: 0, down: 0 };
@@ -47,4 +48,4 @@ function updateLeaderboard() {
         .slice(0, 10);
 }
 
-console.log('Server running on Render');
+console.log(`Server running on port ${port}`);
