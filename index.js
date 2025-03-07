@@ -46,7 +46,7 @@ function broadcast(data) {
 
 function updateLeaderboard() {
     leaderboard = Object.entries(players)
-        .map(([id, player]) => [id, player.data[86400] || {}])
+        .map(([id, player]) => [id, player.data[86400] || player.data[604800] || player.data[2592000] || player.data[900] || player.data[300] || player.data[60] || {}])
         .sort((a, b) => (b[1].reputation || 0) - (a[1].reputation || 0))
         .slice(0, 10);
 }
