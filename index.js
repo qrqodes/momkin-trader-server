@@ -13,7 +13,7 @@ const PORT = process.env.PORT || 8080;
 const HEARTBEAT_INTERVAL = 30000;
 const LEADERBOARD_UPDATE_INTERVAL = 60000;
 let clients = new Map();
-let communityPredictions = { up: 0, down: 0 }; // Persistent across connections
+let communityPredictions = { up: 0, down: 0 };
 let leaderboard = {};
 
 wss.on('connection', (ws, req) => {
@@ -51,7 +51,7 @@ wss.on('connection', (ws, req) => {
 
   ws.on('close', (code, reason) => {
     clients.delete(clientId);
-    console.log(`Client ${clientId} disconnected. Code: ${code}, Reason: ${reason}`);
+    console.log(`Client ${clientId} disconnected. Code: ${code}, Reason: ${reason}, Total clients: ${clients.size}`);
   });
 
   ws.on('error', (error) => {
@@ -64,7 +64,7 @@ function broadcast(data) {
   clients.forEach((ws, id) => {
     if (ws.readyState === WebSocket.OPEN) {
       ws.send(message);
-      console.log(`Broadcast to ${id}:`, data);
+      console.log(`Sent to ${id}:`, data);
     }
   });
 }
@@ -101,7 +101,7 @@ function updateLeaderboard(data) {
     nickname: nickname || 'Anonymous',
     reputation: parseFloat(reputation) || 0
   };
-  console.log(`Leaderboard updated: ${playerId} - ${nickname} in timeframe ${timeframe} - Reputation: ${reputation}`);
+  console.log(`Leaderboard updated: ${playerId} in timeframe ${timeframe} - Reputation: ${reputation}`);
 }
 
 setInterval(() => {
