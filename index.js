@@ -73,10 +73,10 @@ function broadcastLeaderboardToClient(ws) {
   Object.keys(leaderboard).forEach(timeframe => {
     const scores = Object.entries(leaderboard[timeframe] || {})
       .sort((a, b) => b[1].reputation - a[1].reputation)
-      .slice(0, 10);
+      .slice(0, 10)
+      .map(([id, info]) => [id, info]);
     if (ws.readyState === WebSocket.OPEN) {
       ws.send(JSON.stringify({ type: 'leaderboard', timeframe: parseInt(timeframe), data: scores }));
-      console.log(`Sent leaderboard for timeframe ${timeframe} to client:`, scores);
     }
   });
 }
@@ -85,7 +85,8 @@ function broadcastLeaderboard() {
   Object.keys(leaderboard).forEach(timeframe => {
     const scores = Object.entries(leaderboard[timeframe] || {})
       .sort((a, b) => b[1].reputation - a[1].reputation)
-      .slice(0, 10);
+      .slice(0, 10)
+      .map(([id, info]) => [id, info]);
     broadcast({ type: 'leaderboard', timeframe: parseInt(timeframe), data: scores });
   });
 }
